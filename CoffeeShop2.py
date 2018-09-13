@@ -30,8 +30,7 @@ class Customer(pygame.sprite.Sprite):
     counterQueue = False
     waitingQueue = True
     exitQueue = False
-    timee = random.randrange(5, 10)
-    quantity = random.randrange(1, 3)
+    
 
     def __init__(self):
         super().__init__()
@@ -41,7 +40,8 @@ class Customer(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 230
         self.rect.y = 530
-
+        self.timee = random.randrange(5, 10)
+        self.quantity = random.randrange(1, 3)
         self.order = random.choice(menu)
 
     def update(self):
