@@ -32,7 +32,6 @@ class Customer(pygame.sprite.Sprite):
     exitQueue = False
     timee = random.randrange(5, 10)
     quantity = random.randrange(1, 3)
-    customerCtr = 0
 
     def __init__(self):
         super().__init__()
@@ -70,14 +69,13 @@ class Customer(pygame.sprite.Sprite):
                 self.kill()
                 totalSales += (prices[self.order] * self.quantity)
                 salesCount[self.order] += self.quantity
-                self.customerCtr = + 1
+                customerCtr = + 1
                 self.timee = 0
                 self.exitQueue = False
                 self.waitingQueue = True
                 self.spawnCust = True
                 print("TOTAL SALES: "+str(totalSales))
                 print(salesCount)
-                print(self.customerCtr)
 
         amount = self.quantity * prices[self.order]
 
@@ -119,6 +117,7 @@ counter = Counter()
 allSprites.add(counter)
 customers_.add(customers)
 counter_.add(counter)
+customerCtr = 0
 while done:
 
     if spawnCust:
@@ -137,7 +136,9 @@ while done:
     screen.blit(background, (0,0))
     screen.blit(counterBound, (0, 162))
     #=================LABELS========================
-    totCustLbl = orderLabel.render("==== ITEMS SOLD ===", True, (0, 255, 255))
+    itemsSoldLbl = orderLabel.render("==== ITEMS SOLD ===", True, (0, 255, 255))
+    totCustLbl = orderLabel.render("Customer Count: " + str(customerCtr), True, (0, 255, 255))
+
     screen.blit(totCustLbl, (667, 270))
 
     allSprites.clear(screen, background)
