@@ -69,11 +69,11 @@ class Customer(pygame.sprite.Sprite):
                 self.kill()
                 totalSales += (prices[self.order] * self.quantity)
                 salesCount[self.order] += self.quantity
-                customerCtr = + 1
+                customerCtr += 1
                 self.timee = 0
                 self.exitQueue = False
                 self.waitingQueue = True
-                self.spawnCust = True
+                spawnCust = True
                 print("TOTAL SALES: "+str(totalSales))
                 print(salesCount)
 
@@ -83,7 +83,6 @@ class Customer(pygame.sprite.Sprite):
         OrderLabel2 = orderLabel2.render("Quantity: " + str(self.quantity), True, (255, 255, 255))
         OrderLabel3 = orderLabel2.render("Amount: " + str(amount), True, (255, 255, 255))
         servingTime = orderLabel2.render("ORDER/S WILL BE SERVED IN: " + str(self.timee) + " SECOND/S", True, (255, 255, 255))
-        totCustLbl = orderLabel.render("Customer Count: " + str(self.customerCtr), True, (0, 255, 255))
 
         screen.blit(OrderLabel1, (self.rect.x+50, self.rect.y + 10))
         screen.blit(OrderLabel2, (self.rect.x + 50, self.rect.y + 30))
