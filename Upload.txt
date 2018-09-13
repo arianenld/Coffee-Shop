@@ -1,0 +1,33 @@
+git remote add Coffee-Shop https://github.com/arianenld/Coffee-Shop
+
+
+git pull https://github.com/arianenld/Coffee-Shop master --allow-unrelated-histories
+git pull --rebase
+
+
+git commmit -m "Para sa kinabukasan"
+
+git push origin master
+
+
+git clone https://github.com/arianenld/Coffee-Shop.git
+
+git remote add Calculator https://github.com/arianenld/Calculator
+git clone https://github.com/arianenld/Calculator
+
+git pull https://github.com/arianenld/Calculator
+git add --all
+git commit -m "hehe"
+
+
+
+
+--UPLOAD FILES TO NEW REPO--
+create new repo in github.com -> Copy repo Link
+CMD -> Go to any directory
+CMD -> git clone <Link>
+File Explorer -> Copy files you want to upload into cloned folder
+CMD -> Go to cloned folder (cd <cloned folder>)
+CMD -> git add --all
+CMD -> git commit -m "First Message"
+CMD -> git push origin master
