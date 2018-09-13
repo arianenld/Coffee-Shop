@@ -32,7 +32,7 @@ class Customer(pygame.sprite.Sprite):
     exitQueue = False
     spawnCust = False
     timee = random.randrange(5, 10)
-    quantity = random.randrange(1, 3)
+    quantity = random.randrange(1, 20)
     customerCtr = 0
 
     def __init__(self):
@@ -47,7 +47,7 @@ class Customer(pygame.sprite.Sprite):
         self.order = random.choice(menu)
 
     def update(self):
-        global customerCtr, totalSales, notif, seconds, amount, sales
+        global totalSales, notif, seconds, amount, sales
         if self.waitingQueue:
             self.rect.y -= 1
             if self.rect.y < 223:
@@ -63,22 +63,24 @@ class Customer(pygame.sprite.Sprite):
                 if (seconds <= 1):
                     self.counterQueue = False
                     self.exitQueue = True
-
         if self.exitQueue:
-            self.rect.x = 245
-            self.rect.y += 1
-            if self.rect.y > 545:
-                self.kill()
-                totalSales += (prices[self.order] * self.quantity)
-                salesCount[self.order] += self.quantity
-                self.customerCtr = + 1
-                self.timee = 0
-                self.exitQueue = False
-                self.waitingQueue = True
-                self.spawnCust = True
-                print("TOTAL SALES: "+str(totalSales))
-                print(salesCount)
-                print(self.customerCtr)
+            if self.rect.x <= 400:
+                self.rect.x += 1
+
+            else:
+                self.rect.y += 1
+                if self.rect.y > 545:
+                    self.kill()
+                    totalSales += (prices[self.order] * self.quantity)
+                    salesCount[self.order] += self.quantity
+                    self.customerCtr = + 1
+                    self.timee = 0
+                    self.spawnCust = True
+                    self.exitQueue = False
+                    self.waitingQueue = True
+                    print("TOTAL SALES: "+str(totalSales))
+                    print(salesCount)
+                    print("CUSTOMER COUNT:" +str(self.customerCtr))
 
         if self.spawnCust:
             customers = Customer()
@@ -98,7 +100,7 @@ class Customer(pygame.sprite.Sprite):
         screen.blit(OrderLabel2, (self.rect.x + 50, self.rect.y + 30))
         screen.blit(OrderLabel3, (self.rect.x + 50, self.rect.y + 50))
         screen.blit(servingTime, (300, 140))
-        screen.blit(totCustLbl, (667, 247))
+        screen.blit(totCustLbl, (667, 220))
 
 class Counter(pygame.sprite.Sprite):
     def __init__(self):
@@ -136,8 +138,11 @@ while done:
     screen.blit(background, (0,0))
     screen.blit(counterBound, (0, 162))
     #=================LABELS========================
-    totCustLbl = orderLabel.render("==== ITEMS SOLD ===", True, (0, 255, 255))
-    screen.blit(totCustLbl, (667, 270))
+    totSalesLbl = orderLabel.render("TOTAL SALES: " + str(totalSales), True, (0, 255, 255))
+    itemsDisplay = orderLabel.render("==== ITEMS SOLD ===", True, (0, 255, 255))
+
+    screen.blit(totSalesLbl, (667, 247))
+    screen.blit(itemsDisplay, (667, 270))
 
     allSprites.clear(screen, background)
     allSprites.update()
