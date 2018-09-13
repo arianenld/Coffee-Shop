@@ -124,7 +124,7 @@ class Customer(pygame.sprite.Sprite):
         OrderLabel3 = orderLabel2.render("Amount: " + str(amount), True, (255, 255, 255))
         servingTime = orderLabel2.render("ORDER/S WILL BE SERVED IN: " + str(self.timee) + " SECOND/S", True,(255, 255, 255))
         totCustLbl = orderLabel2.render("Customer Count: " + str(customerCtr), True, ((250,235,215)))
-
+        
         screen.blit(OrderLabel1, (self.rect.x + 50, self.rect.y + 10))
         screen.blit(OrderLabel2, (self.rect.x + 50, self.rect.y + 30))
         screen.blit(OrderLabel3, (self.rect.x + 50, self.rect.y + 50))
