@@ -2,7 +2,7 @@ import pygame, random, time
 pygame.init()
 pygame.mixer.init() #INITIALIZATION
 
-screen = pygame.display.set_mode((900, 550))
+screen = pygame.display.set_mode((610, 510))
 pygame.display.set_caption("Coffee Shop")
 
 background = pygame.Surface(screen.get_size())
@@ -10,7 +10,7 @@ background = background.convert()
 background.fill((25, 20, 25)) #DISPLAY SETTINGS
 
 counterBound = pygame.image.load("counterBound.jpg")
-counterBound = pygame.transform.scale(counterBound, (598, 50))
+counterBound = pygame.transform.scale(counterBound, (610, 50))
 
 thanks = pygame.mixer.Sound("thankyou.ogg")
 
@@ -21,11 +21,51 @@ customerList = ["customer1", "customer2"]
 
 totalSales = 0
 amount = 0
-
+totalSalesDirect =0
 # FONT LABELS
 orderLabel = pygame.font.SysFont("century gothic", 20)
 orderLabel2 = pygame.font.SysFont("league gothic", 20)
 salesLabel = pygame.font.SysFont("comic sans", 30)
+
+def Day():
+    totalCustomerPerDay = random.randrange(40,100)
+    averageTimeSpent = 0
+    timeSpent = 0
+    global totalSalesDirect
+
+    for i in range(totalCustomerPerDay):
+        choicee = random.choice(menu)
+        timeSpent += random.randrange(1,20)
+        totalSalesDirect += prices[choicee]
+    averageTimeSpent += timeSpent/totalCustomerPerDay
+
+    print("=================DAILY===================")
+    print("TOTAL REVENUE: ", str(totalSalesDirect))
+    print("NO. OF CUSTOMER SERVED PER DAY: ", str(totalCustomerPerDay))
+    print("AVERAGE TIME SPENT: ", str(averageTimeSpent))
+    print("=========================================")
+
+def Month():
+    averageTimeSpent = 0
+    timeSpent = 0
+    monthlyServing = 0
+    global totalSalesDirect
+
+    for j in range(30):
+        totalCustomerPerMonth = random.randrange(40, 100)
+        monthlyServing += totalCustomerPerMonth
+        for i in range(totalCustomerPerMonth):
+            choicee = random.choice(menu)
+            timeSpent += random.randrange(1, 20)
+            totalSalesDirect += prices[choicee]
+
+    averageTimeSpent += timeSpent / monthlyServing
+
+    print("=================MONTHLY=================")
+    print("TOTAL REVENUE: ", str(totalSalesDirect))
+    print("NO. OF CUSTOMER SERVED PER MONTH: ", str(monthlyServing))
+    print("AVERAGE TIME SPENT: ", str(averageTimeSpent))
+    print("=========================================")
 
 class Customer(pygame.sprite.Sprite):
     counterQueue = False
@@ -38,7 +78,7 @@ class Customer(pygame.sprite.Sprite):
         customer = pygame.transform.scale(customer, (50, 50))
         self.image = customer
         self.rect = self.image.get_rect()
-        self.rect.x = 230
+        self.rect.x = 240
         self.rect.y = 530
         self.timee = random.randrange(5, 10)
         self.quantity = random.randrange(1, 15)
@@ -67,7 +107,7 @@ class Customer(pygame.sprite.Sprite):
                 thanks.play()
             else:
                 self.rect.y += 1
-                if self.rect.y > 545:
+                if self.rect.y > 510:
                     self.kill()
                     totalSales += (prices[self.order] * self.quantity)
                     salesCount[self.order] += self.quantity
@@ -83,13 +123,13 @@ class Customer(pygame.sprite.Sprite):
         OrderLabel2 = orderLabel2.render("Quantity: " + str(self.quantity), True, (255, 255, 255))
         OrderLabel3 = orderLabel2.render("Amount: " + str(amount), True, (255, 255, 255))
         servingTime = orderLabel2.render("ORDER/S WILL BE SERVED IN: " + str(self.timee) + " SECOND/S", True,(255, 255, 255))
-        totCustLbl = orderLabel.render("Customer Count: " + str(customerCtr), True, (0, 255, 255))
+        totCustLbl = orderLabel2.render("Customer Count: " + str(customerCtr), True, ((250,235,215)))
 
         screen.blit(OrderLabel1, (self.rect.x + 50, self.rect.y + 10))
         screen.blit(OrderLabel2, (self.rect.x + 50, self.rect.y + 30))
         screen.blit(OrderLabel3, (self.rect.x + 50, self.rect.y + 50))
-        screen.blit(servingTime, (300, 140))
-        screen.blit(totCustLbl, (667, 220))
+        screen.blit(servingTime, (320, 140))
+        screen.blit(totCustLbl, (15, 320))
 
 class Counter(pygame.sprite.Sprite):
     def __init__(self):
@@ -98,11 +138,12 @@ class Counter(pygame.sprite.Sprite):
         customer = pygame.transform.scale(counter, (100, 100))
         self.image = customer
         self.rect = self.image.get_rect()
-        self.rect.x = 150
+        self.rect.x = 220
         self.rect.y = 50
 
     def update(self):
-        self.rect.x = 200
+        self.rect.x = 220
+
 
 done = True
 spawnCust = True
@@ -133,27 +174,43 @@ while done:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                Day()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                Month()
+
     screen.blit(background, (0, 0))
     screen.blit(counterBound, (0, 162))
+
+    instruction = orderLabel2.render("INSTRUCTION!", True, (0, 255, 255))
+    instruction1 = orderLabel2.render("Press left key for daily computation.", True, (0, 255, 255))
+    instruction2 = orderLabel2.render("Press right key for monthly computation.", True, (0, 255, 255))
+    salesBreakdown = orderLabel2.render("=== SALES BREAKDOWN ===", True, (255,228,196))
+    screen.blit(instruction, (15,230))
+    screen.blit(instruction1, (15, 250))
+    screen.blit(instruction2, (15, 270))
+    screen.blit(salesBreakdown, (15, 300))
     # =================LABELS========================
-    totSalesLbl = orderLabel.render("TOTAL SALES: " + str(totalSales), True, (0, 255, 255))
-    itemsDisplay = orderLabel.render("==== ITEMS SOLD ===", True, (0, 255, 255))
-    hotCofLbl = orderLabel.render("Hot Coffee Count: " + str(salesCount["Hot coffee"]), True, (0, 255, 255))
-    iceCofLbl = orderLabel.render("Ice Coffee Count: " + str(salesCount["Ice coffee"]), True, (0, 255, 255))
-    hotChocLbl = orderLabel.render("Hot Choco Count: " + str(salesCount["Hot chocolate"]), True, (0, 255, 255))
-    iceChocLbl = orderLabel.render("Ice Choco Count: " + str(salesCount["Ice chocolate"]), True, (0, 255, 255))
-    hotTea = orderLabel.render("Hot Tea Count: " + str(salesCount["Hot tea"]), True, (0, 255, 255))
-    iceTea = orderLabel.render("Ice Tea Count: " + str(salesCount["Ice tea"]), True, (0, 255, 255))
+    itemsDisplay = orderLabel2.render("==== ITEMS SOLD ===", True, (255,228,196))
+    totSalesLbl = orderLabel2.render("Total Sales: " + str(totalSales), True, (255,228,196))
+    hotCofLbl = orderLabel2.render("Hot Coffee Count: " + str(salesCount["Hot coffee"]), True, (255,228,196))
+    iceCofLbl = orderLabel2.render("Ice Coffee Count: " + str(salesCount["Ice coffee"]), True, (255,228,196))
+    hotChocLbl = orderLabel2.render("Hot Choco Count: " + str(salesCount["Hot chocolate"]), True, (255,228,196))
+    iceChocLbl = orderLabel2.render("Ice Choco Count: " + str(salesCount["Ice chocolate"]), True, (255,228,196))
+    hotTea = orderLabel2.render("Hot Tea Count: " + str(salesCount["Hot tea"]), True, (255,228,196))
+    iceTea = orderLabel2.render("Ice Tea Count: " + str(salesCount["Ice tea"]), True, (255,228,196))
 
-    screen.blit(totSalesLbl, (667, 247))
-    screen.blit(itemsDisplay, (667, 272))
+    screen.blit(itemsDisplay, (15, 360))
+    screen.blit(totSalesLbl, (15, 340))
 
-    screen.blit(hotCofLbl, (667, 297))
-    screen.blit(iceCofLbl, (667, 322))
-    screen.blit(hotChocLbl, (667, 347))
-    screen.blit(iceChocLbl, (667, 372))
-    screen.blit(hotTea, (667, 397))
-    screen.blit(iceTea, (667, 422))
+    screen.blit(hotCofLbl, (15, 380))
+    screen.blit(iceCofLbl, (15, 400))
+    screen.blit(hotChocLbl, (15, 420))
+    screen.blit(iceChocLbl, (15, 440))
+    screen.blit(hotTea, (15, 460))
+    screen.blit(iceTea, (15, 480))
 
     allSprites.clear(screen, background)
     allSprites.update()
