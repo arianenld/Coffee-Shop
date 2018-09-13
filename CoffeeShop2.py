@@ -1,6 +1,6 @@
 import pygame, random, time
 pygame.init()
-
+#hehehehe
 screen = pygame.display.set_mode((900, 550))
 pygame.display.set_caption("Coffee Shop")
 
